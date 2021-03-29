@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/stocksFragment2">
+
+    <fragment
+        android:id="@+id/suggestionsFragment"
+        android:name="com.example.stock.ui.fragments.SuggestionsFragment"
+        android:label="fragment_suggestions"
+        tools:layout="@layout/fragment_suggestions" >
+        <action
+            android:id="@+id/action_suggestionsFragment_to_stocksFragment2"
+            app:destination="@id/stocksFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/stocksFragment2"
+        android:name="com.example.stock.ui.fragments.StocksFragment"
+        android:label="StocksFragment" >
+        <action
+            android:id="@+id/action_stocksFragment2_to_suggestionsFragment"
+            app:destination="@id/suggestionsFragment" />
+        <argument
+            android:name="name"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
+</navigation>

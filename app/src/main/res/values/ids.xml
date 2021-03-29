@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="searh_field" type="id" />
+    <item name="favourite_text" type="id" />
+    <item name="stocks_text" type="id" />
+    <item name="recyclerView" type="id" />
+</resources>

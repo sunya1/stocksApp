@@ -1,0 +1,70 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "2189cf82a0fd90bfcbf47c5d71300c0c",
+    "entities": [
+      {
+        "tableName": "price_table",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`ticker` TEXT NOT NULL, `curr_price` REAL NOT NULL, `highest_price` REAL NOT NULL, `lowest_price` REAL NOT NULL, `open_price` REAL NOT NULL, `prevClose_price` REAL NOT NULL, `t_price` INTEGER NOT NULL, PRIMARY KEY(`ticker`))",
+        "fields": [
+          {
+            "fieldPath": "ticker",
+            "columnName": "ticker",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "c",
+            "columnName": "curr_price",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "h",
+            "columnName": "highest_price",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "l",
+            "columnName": "lowest_price",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "o",
+            "columnName": "open_price",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pc",
+            "columnName": "prevClose_price",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "t",
+            "columnName": "t_price",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "ticker"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '2189cf82a0fd90bfcbf47c5d71300c0c')"
+    ]
+  }
+}
