@@ -29,14 +29,16 @@ class SuggestionsFragment : Fragment() , ItemClicked {
 
         val popularRequestList =
                 listOf(
-                        "Amazon",
-                        "Bloomberg",
-                        "Apple",
-                        "Facebook",
-                        "Microsoft",
                         "Tesla",
-                        "Alibaba",
-                        "Mastercard"
+                        "Google",
+                        "Facebook",
+                        "Apple",
+                        "Monster",
+                        "Microsoft",
+                        "Amazon",
+                        "Fox",
+                        "Mastercard",
+                        "Visa"
                 )
 
         popular_rv.adapter = SuggestionsFragmentAdapter(popularRequestList , this)

@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import com.example.stock.api.RetrofitInstance
 import com.example.stock.db.PriceDao
 import com.example.stock.model.Stock
+import com.example.stock.model.StockCandle
 import com.example.stock.model.StockPrice
 import com.example.stock.model.TickersItem
 import kotlinx.coroutines.*
@@ -31,7 +32,6 @@ class Repository(private val priceDao: PriceDao) {
         }
     }
 
-
     suspend fun getPrice(ticker: String): Response<StockPrice> {
         return RetrofitInstance.api.getPrice(ticker)
     }
@@ -41,6 +41,10 @@ class Repository(private val priceDao: PriceDao) {
     suspend fun getTickers(): List<TickersItem> {
         return RetrofitInstance.tickersApi.getTickers()
     }
+    suspend fun getRes(ticker: String, resolution: String, from: Long): Response<StockCandle>? {
+        return RetrofitInstance.api.getCandles(ticker , resolution ,from, System.currentTimeMillis() / 1000  )
+    }
+}
 
     private fun runOnBackground(submit: (ExecutorService) -> Unit) {
         val executor = Executors.newCachedThreadPool()
@@ -52,4 +56,4 @@ class Repository(private val priceDao: PriceDao) {
             executor.shutdown()
         }
     }
-}
+

@@ -1,5 +1,6 @@
 package com.example.stock.ui.fragments
 
+import android.content.Intent
 import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
@@ -10,9 +11,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.stock.App
+import com.example.stock.GraphActivity
 import com.example.stock.R
 import com.example.stock.model.Stock
 import com.example.stock.model.StockPrice
@@ -26,8 +29,9 @@ import com.example.stock.ui.viewmodels.SharedViewModel
 import kotlinx.android.synthetic.main.fragment_search.*
 import kotlinx.android.synthetic.main.fragment_stocks.*
 import kotlinx.coroutines.*
+import okhttp3.internal.wait
 
-const val NUM_OF_STOCKS = 504
+const val NUM_OF_STOCKS: Int = 504
 class StocksFragment : Fragment(R.layout.fragment_stocks) , OnFavouriteClickListener  {
 
     private lateinit var viewModel: MainViewModel
@@ -43,7 +47,7 @@ class StocksFragment : Fragment(R.layout.fragment_stocks) , OnFavouriteClickList
 
 
     private val args: StocksFragmentArgs by navArgs()
-    private var _tickers = ArrayList<TickersItem>()
+    private var tickers = ArrayList<TickersItem>()
 
     private var i = 1
 
@@ -52,7 +56,7 @@ class StocksFragment : Fragment(R.layout.fragment_stocks) , OnFavouriteClickList
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initVM()
-
+        observeTickers()
         observeStockResponse()
 
         checkPricesInDb()
@@ -99,9 +103,14 @@ class StocksFragment : Fragment(R.layout.fragment_stocks) , OnFavouriteClickList
         })
     }
 
+    private fun observeTickers(){
+        viewModel.getTickers()
 
-
-
+        viewModel.tickers.observe(this , {
+            tickers = it as ArrayList<TickersItem>
+            Thread.sleep(2000)
+        })
+    }
 
     private fun initVM() {
         val app = requireActivity().application as App
@@ -125,6 +134,9 @@ class StocksFragment : Fragment(R.layout.fragment_stocks) , OnFavouriteClickList
             myAdapter.setData(it.body()!!)
 
         })
+
+
+
     }
 
     private fun checkPricesInDb(){
@@ -133,7 +145,6 @@ class StocksFragment : Fragment(R.layout.fragment_stocks) , OnFavouriteClickList
             if (it.size < NUM_OF_STOCKS) {
                 observePriceResponse()
                 prices = it as ArrayList<StockPrice>
-
             }
             else{
                 prices = it as ArrayList<StockPrice>
@@ -143,22 +154,19 @@ class StocksFragment : Fragment(R.layout.fragment_stocks) , OnFavouriteClickList
     }
 
     private fun observePriceResponse() {
-        viewModel.getTickers()
 
-        viewModel.tickers.observe(this , {
-            _tickers = it as ArrayList<TickersItem>
-        })
+
+
 
         CoroutineScope(Dispatchers.Main).launch{
-            delay(2000)
+            delay(1000)
 
-                insertPrice(_tickers[i].symbol, i ,_tickers)
+                insertPrice(tickers[i].symbol, i ,tickers)
                 i++
 
         }
 
     }
-
     fun insertPrice(ticker: String, i: Int, allTickers: ArrayList<TickersItem>) {
             var times = 0
             viewModel.getPrice(ticker)
@@ -218,6 +226,22 @@ class StocksFragment : Fragment(R.layout.fragment_stocks) , OnFavouriteClickList
         })
 
         return  price
+    }
+
+    override fun showGraph(ticker: String , nameOfCompany:String) {
+        var price = StockPrice()
+        viewModel.allPrices.observe(this , { prices ->
+            if(!prices.isNullOrEmpty() ){
+                var check = prices.find { it.ticker == ticker }
+                if(check != null) price = check
+            }
+        })
+        val intent = Intent(context, GraphActivity::class.java).apply {
+            putExtra("ticker", ticker)
+            putExtra("name" , nameOfCompany)
+            putExtra("price" , price)
+        }
+        startActivity(intent)
     }
 
 

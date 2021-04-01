@@ -20,7 +20,7 @@ import kotlin.collections.ArrayList
 
 class StocksFragmentAdapter(private val itemClickListener: OnFavouriteClickListener) : RecyclerView.Adapter<StocksFragmentAdapter.StocksViewHolder>() {
     private var stocks: ArrayList<Stock> = ArrayList()
-    private var prices: ArrayList<StockPrice> = ArrayList()
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StocksViewHolder {
 
@@ -42,6 +42,10 @@ class StocksFragmentAdapter(private val itemClickListener: OnFavouriteClickListe
 
         if(itemClickListener.isFavourite(stocks[position])){
             holder.itemView.findViewById<ImageView>(R.id.add_favourite).setImageResource(R.drawable.ic_favourite)
+        }
+
+        holder.itemView.setOnClickListener {
+            itemClickListener.showGraph(stocks[position].ticker , (stocks[position].name))
         }
 
         holder.bind(stocks[position] , itemClickListener )
@@ -112,8 +116,6 @@ class StocksFragmentAdapter(private val itemClickListener: OnFavouriteClickListe
                 }
 
 
-                Log.d("binder icon" , position.toString())
-                Log.d("adapter " , adapterPosition.toString())
             }
 
             costOfStock.text = price.c.toString() + "$"
@@ -154,6 +156,7 @@ interface OnFavouriteClickListener  {
     fun isFavourite(stock: Stock): Boolean
     fun deleteItemFromFav(stock: Stock)
     fun getPrice(ticker: String): StockPrice
+    fun showGraph(ticker: String , nameOfCompany: String)
 
 }
 

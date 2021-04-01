@@ -11,6 +11,7 @@ import okhttp3.OkHttpClient
 import okhttp3.internal.connection.ConnectInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 
 
 object RetrofitInstance{
@@ -33,8 +34,11 @@ object RetrofitInstance{
             .create()
 
     val okHttpClient = OkHttpClient.Builder()
-        .addInterceptor(requesIterceptor)
-        .build()
+            .connectTimeout(60, TimeUnit.SECONDS)
+            .writeTimeout(120, TimeUnit.SECONDS)
+            .readTimeout(60, TimeUnit.SECONDS)
+            .addInterceptor(requesIterceptor)
+            .build()
     val okHttpClient1 = OkHttpClient.Builder()
 
             .build()

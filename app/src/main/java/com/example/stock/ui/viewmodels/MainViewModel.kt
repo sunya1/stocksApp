@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.stock.model.Stock
+import com.example.stock.model.StockCandle
 import com.example.stock.model.StockPrice
 import com.example.stock.model.TickersItem
 import com.example.stock.repository.Repository
@@ -20,6 +21,7 @@ class MainViewModel(private val repository: Repository): ViewModel() {
     val tickers: MutableLiveData<List<TickersItem>> = MutableLiveData()
     val allPrices: LiveData<List<StockPrice>> = repository.allPrices
 
+    val res: MutableLiveData<Response<StockCandle>> = MutableLiveData()
     fun insert(stockPrice: StockPrice) {
 
         repository.insert(stockPrice)
@@ -34,7 +36,6 @@ class MainViewModel(private val repository: Repository): ViewModel() {
             priceResponse.value = response
 
         }
-
 
     }
     fun getStocks(){
